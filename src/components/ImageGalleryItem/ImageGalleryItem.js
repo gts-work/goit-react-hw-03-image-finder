@@ -1,5 +1,7 @@
 import React from "react";
 
+import style from "./ImageGalleryItem.module.css";
+
 const ImageGalleryItem = ({
   id,
   user,
@@ -15,11 +17,11 @@ const ImageGalleryItem = ({
   };
 
   return (
-    <li key={id} className="ImageGalleryItem">
+    <li key={id} className={style.image_gallery_item}>
       <img
         src={webformatURL}
         alt={user}
-        className="ImageGalleryItem-image"
+        className={style.image_gallery_item_image}
         onClick={onClickImage}
       />
     </li>
