@@ -2,7 +2,7 @@ import React from "react";
 
 import ImageGalleryItem from "../ImageGalleryItem";
 
-const ImageGallery = ({ images }) => {
+const ImageGallery = ({ images, showLargeImage }) => {
   return (
     <ul className="ImageGallery">
       {images.map(({ id, user, largeImageURL, webformatURL }) => (
@@ -11,6 +11,7 @@ const ImageGallery = ({ images }) => {
           user={user}
           largeImageURL={largeImageURL}
           webformatURL={webformatURL}
+          onClick={showLargeImage}
         />
       ))}
     </ul>

@@ -6,6 +6,7 @@ import Searchbar from "./components/Searchbar";
 import ImageGallery from "./components/ImageGallery";
 import Loader from "./components/Loader";
 import Button from "./components/Button";
+import Modal from "./components/Modal";
 
 import pixabayApi from "./services/pixabay-api";
 
@@ -14,8 +15,10 @@ export default class App extends Component {
     images: [],
     searchQuery: "",
     currentPage: 1,
+    largeImageURL: "",
     isLoading: false,
     totalImages: 0,
+    showModal: false,
     error: null,
   };
 
@@ -81,8 +84,24 @@ export default class App extends Component {
     this.fetchImages();
   };
 
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  showLargeImage = ({ largeImageURL }) => {
+    console.log("App ~ url", largeImageURL);
+
+    this.setState({
+      largeImageURL: largeImageURL,
+      showModal: !this.state.showModal,
+    });
+  };
+
   render() {
-    const { images, isLoading, totalImages } = this.state;
+    const { images, isLoading, totalImages, showModal, largeImageURL } =
+      this.state;
     const diffCurrentLoadImages = totalImages - images.length;
     const isShowLoadMore =
       images.length > 0 && diffCurrentLoadImages > 0 && !isLoading;
@@ -90,52 +109,23 @@ export default class App extends Component {
     return (
       <Container>
         <Searchbar onSubmit={this.onChangeQuery} />
-        {images.length > 0 && <ImageGallery images={images} />}
+        {images.length > 0 && (
+          <ImageGallery showLargeImage={this.showLargeImage} images={images} />
+        )}
 
         {isLoading && <Loader />}
 
         {isShowLoadMore && <Button onLoadMore={this.onLoadMore} />}
 
-        {images.length < 0 && (
-          <div>
-            <br />
-            <br />
-            <br />
-            <hr />
-            <hr />
-            <hr />
+        {/* <Modal onClose={this.toggleModal}>
+                    <p>MODAL</p>
+                </Modal> */}
 
-            <p>TailSpin</p>
-            <LoaderItem
-              type="TailSpin"
-              color="#00BFFF"
-              height={80}
-              width={80}
-            />
-            <p>ThreeDots</p>
-            <LoaderItem
-              type="ThreeDots"
-              color="#00BFFF"
-              height={80}
-              width={80}
-            />
-            <p>BallTriangle</p>
-            <LoaderItem
-              type="BallTriangle"
-              color="#00BFFF"
-              height={80}
-              width={80}
-            />
-            <p>Bars</p>
-            <LoaderItem type="Bars" color="#00BFFF" height={80} width={80} />
-            <p>Circles</p>
-            <LoaderItem type="Circles" color="#00BFFF" height={80} width={80} />
-            <p>Grid</p>
-            <LoaderItem type="Grid" color="#00BFFF" height={80} width={80} />
-
-            <p>Oval</p>
-            <LoaderItem type="Oval" color="#00BFFF" height={80} width={80} />
-          </div>
+        {showModal && (
+          <Modal
+            largeImageURL={largeImageURL}
+            onClose={this.toggleModal}
+          ></Modal>
         )}
       </Container>
     );
