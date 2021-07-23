@@ -5,7 +5,6 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import styles from "./Loader.module.css";
 
 class Loader extends Component {
-  //other logic
   render() {
     return (
       <div className={styles.div_loader}>

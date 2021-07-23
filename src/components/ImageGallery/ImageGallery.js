@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import ImageGalleryItem from "../ImageGalleryItem";
 import style from "./ImageGallery.module.css";
@@ -17,6 +18,23 @@ const ImageGallery = ({ images, showLargeImage }) => {
       ))}
     </ul>
   );
+};
+
+ImageGallery.defaultProps = {
+  images: PropTypes.shape({
+    largeImageURL: "",
+    webformatURL: "",
+  }),
+};
+
+ImageGallery.propTypes = {
+  images: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    user: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string,
+    webformatURL: PropTypes.string,
+    showLargeImage: PropTypes.func.isRequired,
+  }),
 };
 
 export default ImageGallery;
