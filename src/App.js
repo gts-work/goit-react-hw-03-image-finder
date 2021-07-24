@@ -19,31 +19,14 @@ export default class App extends Component {
     isLoading: false,
     totalImages: 0,
     showModal: false,
+    isLoadMore: false,
     error: null,
   };
-
-  componentDidMount() {
-    console.log("App componentDidMount");
-
-    const { searchQuery, currentPage } = this.state;
-
-    this.fetchImages();
-
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
-  }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
       this.fetchImages();
     }
-
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
   }
 
   fetchImages = () => {
@@ -65,6 +48,14 @@ export default class App extends Component {
           totalImages: totalImages,
           currentPage: prevState.currentPage + 1,
         }));
+        this.setState({ error: "" });
+
+        if (this.state.isLoadMore) {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "smooth",
+          });
+        }
       })
       .catch((error) => this.setState({ error }))
       .finally(() => this.setState({ isLoading: false }));
@@ -75,12 +66,14 @@ export default class App extends Component {
     this.setState({
       searchQuery: query,
       currentPage: 1,
+      isLoadMore: false,
       images: [],
       error: null,
     });
   };
 
   onLoadMore = () => {
+    this.setState({ isLoadMore: true });
     this.fetchImages();
   };
 
@@ -100,7 +93,7 @@ export default class App extends Component {
   };
 
   render() {
-    const { images, isLoading, totalImages, showModal, largeImageURL } =
+    const { images, isLoading, totalImages, showModal, largeImageURL, error } =
       this.state;
     const diffCurrentLoadImages = totalImages - images.length;
     const isShowLoadMore =
@@ -109,6 +102,7 @@ export default class App extends Component {
     return (
       <Container>
         <Searchbar onSubmit={this.onChangeQuery} />
+        {error && <p>{error}</p>}
         {images.length > 0 && (
           <ImageGallery showLargeImage={this.showLargeImage} images={images} />
         )}
